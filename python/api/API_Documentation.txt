@@ -1,0 +1,201 @@
+==========================================
+Employee Expense Manager API Documentation
+==========================================
+
+Base URL
+--------
+http://127.0.0.1:5000
+
+
+==========================================
+Health Check
+==========================================
+
+GET /api/health
+
+Description:
+Returns the status of the Employee API.
+
+Example:
+
+GET http://127.0.0.1:5000/api/health
+
+
+==========================================
+Login
+==========================================
+
+POST /api/login
+
+Description:
+Authenticates an employee and starts a Flask session.
+
+Request Body (JSON):
+
+{
+    "username": "Bob",
+    "password": "bob_22"
+}
+
+
+==========================================
+Logout
+==========================================
+
+POST /api/logout
+
+Description:
+Logs out the current employee and clears the session.
+
+
+==========================================
+Current Session
+==========================================
+
+GET /api/session
+
+Description:
+Returns information about the currently logged-in employee.
+
+
+==========================================
+List Expenses
+==========================================
+
+GET /api/expenses
+
+Description:
+Returns all expenses for the logged-in employee.
+
+
+==========================================
+List Pending Expenses
+==========================================
+
+GET /api/expenses?only_pending=true
+
+Description:
+Returns only pending expenses for the logged-in employee.
+
+
+==========================================
+Submit Expense
+==========================================
+
+POST /api/expenses
+
+Description:
+Creates a new expense.
+
+Request Body (JSON):
+
+{
+    "amount": 42.75,
+    "description": "Parking for client meeting",
+    "category": "Travel"
+}
+
+
+==========================================
+Edit Expense
+==========================================
+
+PUT /api/expenses/<expense_id>
+
+Description:
+Updates an existing pending expense owned by the logged-in employee.
+
+Example:
+
+PUT /api/expenses/927
+
+Request Body (JSON):
+
+{
+    "amount": 55.50,
+    "description": "Updated parking expense",
+    "category": "Travel"
+}
+
+
+==========================================
+Delete Expense
+==========================================
+
+DELETE /api/expenses/<expense_id>
+
+Description:
+Deletes a pending expense owned by the logged-in employee.
+
+Example:
+
+DELETE /api/expenses/927
+
+
+==========================================
+Expense History
+==========================================
+
+GET /api/expenses/history
+
+Description:
+Returns approved and denied expense history, including manager comments and review dates.
+
+
+==========================================
+Authentication
+==========================================
+
+The following endpoints require login:
+
+GET    /api/session
+GET    /api/expenses
+POST   /api/expenses
+PUT    /api/expenses/<expense_id>
+DELETE /api/expenses/<expense_id>
+GET    /api/expenses/history
+
+Login creates a Flask session.
+
+Logout clears the session.
+
+
+==========================================
+HTTP Status Codes
+==========================================
+
+200 OK
+Request completed successfully.
+
+201 Created
+New expense created.
+
+400 Bad Request
+Invalid request data.
+
+401 Unauthorized
+User is not logged in or credentials are invalid.
+
+404 Not Found
+Requested expense was not found.
+
+409 Conflict
+Operation is not allowed (for example,
+trying to edit or delete an expense that has already been approved or denied).
+
+
+==========================================
+Available API Endpoints
+==========================================
+
+GET     /api/health
+POST    /api/login
+POST    /api/logout
+GET     /api/session
+
+GET     /api/expenses
+POST    /api/expenses
+PUT     /api/expenses/<expense_id>
+DELETE  /api/expenses/<expense_id>
+
+GET     /api/expenses/history

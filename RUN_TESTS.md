@@ -3,7 +3,7 @@
 First run the Manager App:
 1: Go to directory expense-app-managers
 2: mvn clean package -DskipTests
-3: mvn exec:java -Dexec.mainClass="com.rev.manager.Main" -Dexec.args="testDatabase.db"
+3: mvn exec:java "-Dexec.mainClass=com.rev.manager.Main" "-Dexec.args=testDatabase.db"
 
 Open a new terminal
 1: Go to directory expense-app-managers

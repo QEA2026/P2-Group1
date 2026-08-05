@@ -27,7 +27,7 @@ class ExpenseManager:
         return dateStr
     
 
-    def add_expense(emp : Employee, amount : float, description : str, category : str) -> int:
+    def add_expense(emp, amount : float, description : str, category : str) -> int:
         ''' Adds an entry with the specified amount and description to the expenses 
         table (also adds an entry to the approvals table), the employee id 
         associated with the employee submitting the expense
@@ -51,7 +51,7 @@ class ExpenseManager:
         dbCursor.close()
         return assign_id
 
-    def edit_expense(emp : Employee, id : int, amount : float, description : str, category : str) -> None:
+    def edit_expense(emp, id : int, amount : float, description : str, category : str) -> None:
         ''' Edits the expense with the specified id, amount, and description.
         Calls the instance method view_expense_status in the employee class
         to check if the expense is pending.
@@ -71,7 +71,7 @@ class ExpenseManager:
         else:
             raise ManagerDecisionError(f"Sorry, a manager has made the decision for this expense. It has been {status}.")
 
-    def remove_expense(emp : Employee, id : int) -> None:
+    def remove_expense(emp, id : int) -> None:
         ''' Removes the expense from the list given the specified id.
         Calls the instance method view_expense_status in the employee class
         to check if the expense is pending. If expense is not pending, a 

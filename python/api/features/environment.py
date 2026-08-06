@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from selenium import webdriver
@@ -10,19 +11,38 @@ def before_scenario(context, scenario):
 
     chrome_options = Options()
 
-    # Keep the browser visible while developing the test.
-    chrome_options.add_argument("--start-maximized")
+    selenium_url = os.getenv("SELENIUM_URL")
 
-    context.driver = webdriver.Chrome(
-        options=chrome_options
-    )
+    if selenium_url:
+        # Docker / Jenkins
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+
+        context.driver = webdriver.Remote(
+            command_executor=selenium_url,
+            options=chrome_options
+        )
+
+        context.base_url = os.getenv(
+            "APP_URL",
+            "http://employee-app:5000/app"
+        )
+
+    else:
+        # Local VS Code
+        chrome_options.add_argument("--start-maximized")
+
+        context.driver = webdriver.Chrome(
+            options=chrome_options
+        )
+
+        context.base_url = "http://127.0.0.1:5000/app"
 
     context.wait = WebDriverWait(
         context.driver,
         10
     )
-
-    context.base_url = "http://127.0.0.1:5000/app"
 
     # Replace these with a valid employee login.
     context.employee_username = "Bob"

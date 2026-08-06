@@ -18,6 +18,7 @@ For the unit tests:
 1: There are 3 testing python files with their names ending with: business_logic.py, happyPath_sadPath.py, and mocking.py
 
    To run each of them as follows:
+   pytest python/tests/unit
 
    a: pytest python/tests/employeeApp_business_logic.py -v
 

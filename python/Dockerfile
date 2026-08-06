@@ -6,10 +6,10 @@ COPY python/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY python/ .
+COPY python/ python/
 
 COPY revExpenseData.db .
 
 EXPOSE 5000
 
-CMD ["python", "api/app.py"]
+CMD ["python", "python/api/app.py"]

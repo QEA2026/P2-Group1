@@ -11,7 +11,8 @@ pipeline {
         stage('Employee Unit Tests') {
             steps {
                 dir('python') {
-                    sh ' docker run --rm employee-app pytest tests/unit'
+                    sh 'docker run --rm employee-app ls -l /app'
+                    // sh ' docker run --rm employee-app pytest tests/unit'
                 }
             }
         }

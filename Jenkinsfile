@@ -2,6 +2,15 @@ pipeline {
     agent any
 
     stages {
+        stage('Deploy Containers') {
+            steps {
+                sh '''
+                    docker compose down || true
+                    docker compose up -d employee-app selenium
+                '''
+            }
+        }
+        
         stage('Build Employee Docker Image') {
             steps {
                 sh 'docker build -t employee-app -f python/Dockerfile .'

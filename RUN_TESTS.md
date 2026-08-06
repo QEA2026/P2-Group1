@@ -71,3 +71,11 @@ API tests were done through postman manually. For more info on APIs, visit API_D
 To execute regular usage test, run test with only the Regular Usage thread enabled. View results under summary report.
 To execute Limit test, run with only Limit thread enabled.
 To execute Spike test, run with BOTH Regular Usage and Spike threads enabled.
+
+## Running the containers:
+
+To run the Python app container, go into the python directory.
+In terminal: docker run -d -p 5000:5000 expense-python
+
+To run the Java app container, go into the expense-app-managers directory.
+In terminal: docker run -d -p 5001:5001 expense-manager-java

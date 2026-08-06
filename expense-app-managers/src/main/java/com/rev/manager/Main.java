@@ -44,8 +44,9 @@ public class Main {
         JDBCManagerDAO jdbcManager = null;
         try {jdbcManager = new JDBCManagerDAO(databaseConnection.getConnection());}
         catch (SQLException e) {
-            System.out.println("Error with your database, please check connection.");
-            System.exit(0);
+            System.err.println("Error with your database, please check connection.");
+            e.printStackTrace();
+            System.exit(1);
         }
         AuthenticationService authenticationService = new AuthenticationService(userRepository);
         ExpenseService expenseService = new ExpenseService(expenseRepository, approvalRepository);
@@ -67,10 +68,10 @@ public class Main {
                 });
             });
             
-            // Enable static file serving from resources
+            // Enable static file serving from resources (serve from classpath:/public)
             config.staticFiles.add(staticFiles -> {
                 staticFiles.hostedPath = "/";
-                staticFiles.directory = "/";
+                staticFiles.directory = "/public";
                 staticFiles.location = Location.CLASSPATH;
             });
             

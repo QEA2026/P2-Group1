@@ -4,14 +4,12 @@ services:
     build:
       context: .
       dockerfile: python/Dockerfile
-    container_name: employee-app
     ports:
       - "5000:5000"
 
 
   selenium:
     image: selenium/standalone-chrome
-    container_name: selenium
     ports:
       - "4444:4444"
 
@@ -20,7 +18,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.e2e
-    container_name: e2e-tests
     environment:
       SELENIUM_URL: http://selenium:4444/wd/hub
       APP_URL: http://employee-app:5000/app

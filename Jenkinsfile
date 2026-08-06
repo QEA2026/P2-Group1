@@ -19,7 +19,7 @@ pipeline {
         stage('Employee E2E Tests') {
             steps {
                 dir('python') {
-                    sh ' docker run --rm employee-app pytest python/tests/e2e'
+                    sh 'docker run --rm -e PYTHONPATH=/app employee-app python -m pytest python/tests/e2e'
                 }
             }
         }

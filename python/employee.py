@@ -10,7 +10,13 @@ def get_database_path() -> str:
     override = os.environ.get("EXPENSE_DB_PATH")
     if override:
         return override
-    return str(Path(__file__).resolve().parent.parent / "revExpenseData.db")
+
+    current_dir = Path(__file__).resolve().parent
+    candidate_db = current_dir / "revExpenseData.db"
+    if candidate_db.exists():
+        return str(candidate_db)
+
+    return str(current_dir.parent / "revExpenseData.db")
 
 class InvalidLoginError(Exception):
     ''' Incorrect username and password combination.'''

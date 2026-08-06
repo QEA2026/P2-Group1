@@ -48,7 +48,12 @@ CORS(
 
 # revExpenseData.db is stored in the P1_Group1 folder.
 if len(sys.argv) < 2:
-    DATABASE_PATH = PYTHON_DIRECTORY.parent / "revExpenseData.db"
+    app_dir = Path(__file__).resolve().parents[1]
+    candidate_db = app_dir / "revExpenseData.db"
+    if candidate_db.exists():
+        DATABASE_PATH = candidate_db
+    else:
+        DATABASE_PATH = app_dir.parent / "revExpenseData.db"
 else: #sys.argv[1] is the name of the test database to use in the resources folder of the expense-app-managers resources files, for testing usage only
     DATABASE_PATH = PYTHON_DIRECTORY.parent / "expense-app-managers" / "src" / "test" / "resources" / sys.argv[1]
 

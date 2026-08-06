@@ -12,7 +12,7 @@ pipeline {
             steps {
                 dir('python') {
                     // sh 'docker run --rm employee-app ls -l /app'
-                    sh ' docker run --rm employee-app pytest tests/unit'
+                    sh ' docker run --rm employee-app pytest python/tests/unit'
                 }
             }
         }

@@ -37,7 +37,7 @@ pipeline {
 
         stage('Build Deployment Manager Image') {
             steps {
-                sh 'docker build -t manager-app -f expense-app-managers/Dockerfile .'
+                sh 'docker build -t manager-app -f expense-app-managers/Dockerfile --build-arg DATABASE_FILE=expense-app-managers/src/test/resources/testDatabase.db .'
             }
         }
 
@@ -53,6 +53,11 @@ pipeline {
         stage('Employee API Tests') {
             steps {
                 sh ' docker compose run --rm api-tests mvn test -Dtest=test_emp_endpoints'
+            }
+        }
+
+        stage('Manager API Tests') {
+            steps {
                 sh ' docker compose run --rm api-tests mvn test -Dtest=test_manager_endpoints'
             }
         }

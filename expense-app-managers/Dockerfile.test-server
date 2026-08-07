@@ -7,15 +7,14 @@ COPY expense-app-managers/src ./src
 
 RUN mvn clean package -DskipTests
 
+
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
 COPY --from=build /workspace/target/expense-app-managers-1.0-SNAPSHOT.jar app.jar
-# Runtime database
-COPY revExpenseData.db /app/revExpenseData.db
 
-ENV DATABASE_PATH=/app/revExpenseData.db
+COPY expense-app-managers/src/test/resources/testDatabase.db /app/testDatabase.db
 
 EXPOSE 5001
 

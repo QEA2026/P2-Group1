@@ -10,16 +10,21 @@ services:
       context: .
       dockerfile: expense-app-managers/Dockerfile
 
+  manager-app-test:
+    build:
+      context: .
+      dockerfile: expense-app-managers/Dockerfile.test-server
+
   api-tests:
     build:
       context: .
       dockerfile: expense-app-managers/Dockerfile.test
     environment:
       EMPLOYEE_API_URL: http://employee-app:5000
-      MANAGER_API_URL: http://manager-app:5001
+      MANAGER_API_URL: http://manager-app-test:5001
     depends_on:
       - employee-app
-      - manager-app
+      - manager-app-test
 
   selenium:
     image: selenium/standalone-chrome

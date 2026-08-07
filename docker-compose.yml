@@ -21,7 +21,7 @@ services:
       - "4444:4444"
     shm_size: 2gb
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4444/status"]
+      test: ["CMD-SHELL", "curl -f http://localhost:4444/status || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5

@@ -55,7 +55,7 @@ pipeline {
                 sh '''
                     echo "Waiting for Selenium..."
 
-                    until curl -s http://localhost:4444/status | grep -q ready; do
+                    until curl -s http://selenium:4444/status | grep -q '"ready":true'; do
                         sleep 5
                     done
 

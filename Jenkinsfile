@@ -54,14 +54,13 @@ pipeline {
             steps {
                 sh '''
                     echo "Waiting for Selenium..."
-                    curl -v http://localhost:4444/status
-                    echo "Finished check"
-                    // until curl -sf http://localhost:4444/status > /dev/null; do
-                    //     echo "Selenium not ready yet..."
-                    //     sleep 5
-                    // done
 
-                    // echo "Selenium is ready!"
+                    until curl -sf host.docker.internal:4444/status > /dev/null; do
+                        echo "Selenium not ready yet..."
+                        sleep 5
+                    done
+
+                    echo "Selenium is ready!"
                 '''
             }
         }

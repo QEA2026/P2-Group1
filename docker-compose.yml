@@ -6,6 +6,13 @@ services:
       dockerfile: python/Dockerfile
     ports:
       - "5000:5000"
+  
+  manager-app:
+    build:
+      context: .
+      dockerfile: expense-app-managers/Dockerfile
+    ports:
+      - "5001:5001"
 
 
   selenium:

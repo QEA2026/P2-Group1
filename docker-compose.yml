@@ -4,16 +4,22 @@ services:
     build:
       context: .
       dockerfile: python/Dockerfile
-    ports:
-      - "5000:5000"
-  
+
   manager-app:
     build:
       context: .
       dockerfile: expense-app-managers/Dockerfile
-    ports:
-      - "5001:5001"
 
+  api-tests:
+    build:
+      context: .
+      dockerfile: expense-app-managers/Dockerfile.test
+    environment:
+      EMPLOYEE_API_URL: http://employee-app:5000
+      MANAGER_API_URL: http://manager-app:5001
+    depends_on:
+      - employee-app
+      - manager-app
 
   selenium:
     image: selenium/standalone-chrome

@@ -1,47 +1,41 @@
 package com.rev.manager.api;
 
-import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
-// Standard imports
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
-import io.restassured.specification.RequestSpecification;
-import io.restassured.http.ContentType;
-
-import io.restassured.path.json.mapper.factory.*;
-
-import org.hamcrest.text.IsEqualIgnoringCase;
-import org.junit.jupiter.api.AfterAll;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.jupiter.api.Nested;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import static io.restassured.RestAssured.given;
+import io.restassured.http.ContentType;
 
 @Feature("Expense Manager")
 @DisplayName("Employee API Tests")
 public class test_emp_endpoints {
-    private final String BASE_URL = "http://127.0.0.1:5000";
+    private final String BASE_URL =
+        System.getenv().getOrDefault(
+                "EMPLOYEE_API_URL",
+                "http://127.0.0.1:5000"
+        );
     private Connection conn;
 
     /*@BeforeAll

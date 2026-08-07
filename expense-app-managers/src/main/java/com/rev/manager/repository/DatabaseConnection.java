@@ -125,12 +125,12 @@ public class DatabaseConnection {
                 .normalize()
                 .toString();
         }
-
+        
         Path requested = Paths.get(requestedPath);
         if (requested.isAbsolute()) {
             return requested.normalize().toString();
         }
-
+        
         Path fromWorkingDir = Paths.get(System.getProperty("user.dir")).resolve(requested).normalize();
         if (Files.exists(fromWorkingDir)) {
             return fromWorkingDir.toString();

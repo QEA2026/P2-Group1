@@ -27,7 +27,7 @@ public class utilities {
      * @throws SQLException
      */
     public static Connection getConnection() throws SQLException{
-        DatabaseConnection database = new DatabaseConnection();
+        DatabaseConnection database = new DatabaseConnection(TEST_DATABASE);
         return database.getConnection();
     }
 
@@ -38,6 +38,13 @@ public class utilities {
      */
     public static void resetDatabase() {
         executeSqlFile("test-data.sql");
+    }
+
+    /**
+     * Creates a fresh test database
+     */
+    public static void createTestDatabase() {
+        executeSqlFile("test-schema.sql");
     }
 
     /**

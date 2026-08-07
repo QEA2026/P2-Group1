@@ -8,4 +8,4 @@ COPY expense-app-managers/src ./src
 
 RUN mvn dependency:go-offline
 
-CMD ["mvn", "test", "-Dtest=test_emp_endpoints,test_manager_endpoints"]
+CMD ["mvn", "test", "-Dtest=TestRunner"]

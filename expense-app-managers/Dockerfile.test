@@ -5,7 +5,6 @@ WORKDIR /workspace
 COPY expense-app-managers/pom.xml .
 COPY expense-app-managers/src ./src
 
-COPY revExpenseData.db .
 
 RUN mvn dependency:go-offline
 

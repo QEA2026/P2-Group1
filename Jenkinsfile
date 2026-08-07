@@ -50,6 +50,13 @@ pipeline {
             }
         }
 
+        stage('Employee API Tests') {
+            steps {
+                sh ' docker compose run --rm api-tests mvn test -Dtest=test_emp_endpoints'
+                sh ' docker compose run --rm api-tests mvn test -Dtest=test_manager_endpoints'
+            }
+        }
+
         stage('Wait for Selenium') {
             steps {
                 sh '''

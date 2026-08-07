@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sh '''
                     docker compose down --remove-orphans || true
-                    docker compose up -d employee-app selenium
+                    docker compose up -d employee-app manager-app selenium
                 '''
             }
         }
@@ -25,10 +25,20 @@ pipeline {
             }
         }
 
+        stage('Manager Unit Tests') {
+            steps {
+                dir('expense-app-managers') {
+                    sh ' docker run --rm manager-app mvn clean package -DskipTests'
+                    sh '''
+                        docker run --rm manager-app mvn exec:java "-Dexec.mainClass=com.rev.manager.Main" "-Dexec.args=testDatabase.db"
+                    '''
+                }
+            }
+        }
+
         stage('Employee E2E Tests') {
             steps {
                 sh '''
-                    docker compose up -d employee-app selenium
                     docker compose run e2e-tests
                     docker compose down
                 '''

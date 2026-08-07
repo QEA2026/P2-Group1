@@ -34,10 +34,7 @@ pipeline {
         stage('Manager Unit Tests') {
             steps {
                 dir('expense-app-managers') {
-                    sh ' docker run --rm manager-app mvn clean package -DskipTests'
-                    sh '''
-                        docker run --rm manager-app mvn exec:java "-Dexec.mainClass=com.rev.manager.Main" "-Dexec.args=testDatabase.db"
-                    '''
+                    sh ' docker run --rm manager-app mvn clean test -Dtest=JDBCManagerDAOTest'
                 }
             }
         }

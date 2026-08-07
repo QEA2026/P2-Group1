@@ -50,6 +50,20 @@ pipeline {
             }
         }
 
+        stage('Wait for Selenium') {
+            steps {
+                sh '''
+                    echo "Waiting for Selenium..."
+
+                    until curl -s http://localhost:4444/status | grep -q ready; do
+                        sleep 5
+                    done
+
+                    echo "Selenium is ready!"
+                '''
+            }
+        }
+
         stage('Employee E2E Tests') {
             steps {
                 sh '''

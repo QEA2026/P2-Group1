@@ -50,7 +50,12 @@ For the test reports:
 
 ## Running API Tests:
 
-API tests were done through postman manually. For more info on APIs, visit API_Documentation.txt. (From the project root folder, Go to P1_Group1\python\api>)
+To run API tests, you need the employee and manager apps running on the test database in their own terminals.
+1: python python\api\app.py testDatabase.db
+2: mvn exec:java "-Dexec.mainClass=com.rev.manager.Main" "-Dexec.args=testDatabase.db" (from expense-app-managers directory)
+3: mvn test -Dtest=test_emp_endpoints
+4: mvn test -Dtest=test_manager_endpoints
+
 
 ## Running E2E Employee App Test:
 

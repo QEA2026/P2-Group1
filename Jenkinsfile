@@ -17,6 +17,12 @@ pipeline {
             }
         }
 
+        stage('Build Manager Docker Image') {
+            steps {
+                sh 'docker build -t manager-app -f expense-app-managers/Dockerfile .'
+            }
+        }
+
         stage('Employee Unit Tests') {
             steps {
                 dir('python') {

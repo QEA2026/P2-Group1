@@ -6,6 +6,7 @@ INSERT INTO "users" VALUES (1,'Andrew','onetwothree','Manager');
 INSERT INTO "users" VALUES (2,'Bob','bob_22','Employee');
 INSERT INTO "users" VALUES (3,'Tommy','micky883','Employee');
 INSERT INTO "users" VALUES (4,'Caleb','jira1','Employee');
+INSERT INTO "users" VALUES (5,'Marco','Polo','Manager');
 INSERT INTO "expenses" VALUES (51,3,300.0,'Certification','2026/06/23','Other');
 INSERT INTO "expenses" VALUES (5,2,422.0,'Power cord','2026/06/24','Other');
 INSERT INTO "expenses" VALUES (18,3,50.0,'Computer','2026/06/24','Other');

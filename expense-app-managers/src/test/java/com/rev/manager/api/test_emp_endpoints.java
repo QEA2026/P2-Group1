@@ -44,11 +44,11 @@ public class test_emp_endpoints {
     private final String BASE_URL = "http://127.0.0.1:5000";
     private Connection conn;
 
-    @BeforeAll
+    /*@BeforeAll
     private static void setup() throws SQLException{
         System.out.println("Starting API Testing");
         utilities.createTestDatabase();
-    }
+    }*/
 
     /*@AfterAll
     private static void cleanup() throws SQLException{

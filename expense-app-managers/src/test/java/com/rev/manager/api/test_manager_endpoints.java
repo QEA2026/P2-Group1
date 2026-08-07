@@ -37,7 +37,7 @@ import io.restassured.response.Response;
 public class test_manager_endpoints {
     private final static String BASE_URL = "http://127.0.0.1:5001";
     private Connection conn;
-    private static final boolean PRINT_DATA = true;
+    private static final boolean PRINT_DATA = false;
     private static String jwtToken;
 
     @BeforeAll
@@ -390,6 +390,8 @@ public class test_manager_endpoints {
                     """);
             assumeTrue(rs.next(), "Error with JDBC object, aborting test");
             int exp_count = rs.getInt("COUNT(*)");
+            s.close();
+            rs.close();
 
             List<LinkedHashMap<String,String>> expList = 
             given()
@@ -425,6 +427,8 @@ public class test_manager_endpoints {
                     """);
             assumeTrue(rs.next(), "Error with JDBC object, aborting test");
             int exp_count = rs.getInt("COUNT(*)");
+            s.close();
+            rs.close();
 
             List<LinkedHashMap<String,String>> expList = 
             given()

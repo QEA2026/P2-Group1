@@ -55,7 +55,8 @@ pipeline {
                 sh '''
                     echo "Waiting for Selenium..."
 
-                    until curl -s http://localhost:4444/status | grep -q '"ready":true'; do
+                    until curl -sf host.docker.internal:4444/status > /dev/null; do
+                        echo "Selenium not ready yet..."
                         sleep 5
                     done
 

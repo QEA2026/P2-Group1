@@ -2,12 +2,16 @@ pipeline {
     agent any
 
     stages {
-        stage('Deploy Containers') {
+
+        stage('Build Test Employee Image') {
             steps {
-                sh '''
-                    docker compose down --remove-orphans || true
-                    docker compose up -d employee-app manager-app selenium
-                '''
+                sh ' docker build -t employee-test -f python/Dockerfile .'
+            }
+        }
+
+        stage('Build Test Manager Image') {
+            steps {
+                sh ' docker build -t manager-test -f expense-app-managers/Dockerfile.test .'
             }
         }
 
@@ -21,25 +25,28 @@ pipeline {
 
         stage('Manager Unit Tests') {
             steps {
-                sh '''
-                    docker run --rm \
-                    -v "$PWD/expense-app-managers":/workspace \
-                    -w /workspace \
-                    maven:3.9-eclipse-temurin-21 \
-                    mvn test -Dtest=JDBCManagerDAOTest
-                '''
+                sh ' docker run --rm manager-test mvn test -Dtest=JDBCManagerDAOTest'
             }
         }
 
-        stage('Build Employee Docker Image') {
+        stage('Build Deployment Employee Image') {
             steps {
                 sh 'docker build -t employee-app -f python/Dockerfile .'
             }
         }
 
-        stage('Build Manager Docker Image') {
+        stage('Build Deployment Manager Image') {
             steps {
                 sh 'docker build -t manager-app -f expense-app-managers/Dockerfile .'
+            }
+        }
+
+        stage('Deploy Containers') {
+            steps {
+                sh '''
+                    docker compose down --remove-orphans || true
+                    docker compose up -d employee-app manager-app selenium
+                '''
             }
         }
 
@@ -50,6 +57,14 @@ pipeline {
                     docker compose down
                 '''
             }
+        }
+    }
+
+    post {
+        always {
+            sh '''
+                docker compose down --remove-orphans || true
+            '''
         }
     }
 }

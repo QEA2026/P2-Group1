@@ -11,6 +11,26 @@ pipeline {
             }
         }
 
+        stage('Employee Unit Tests') {
+            steps {
+                dir('python') {
+                    sh ' docker run --rm employee-app pytest python/tests/unit'
+                }
+            }
+        } 
+
+        stage('Manager Unit Tests') {
+            steps {
+                sh '''
+                    docker run --rm \
+                    -v "$PWD/expense-app-managers":/workspace \
+                    -w /workspace \
+                    maven:3.9-eclipse-temurin-21 \
+                    mvn test -Dtest=JDBCManagerDAOTest
+                '''
+            }
+        }
+
         stage('Build Employee Docker Image') {
             steps {
                 sh 'docker build -t employee-app -f python/Dockerfile .'
@@ -20,22 +40,6 @@ pipeline {
         stage('Build Manager Docker Image') {
             steps {
                 sh 'docker build -t manager-app -f expense-app-managers/Dockerfile .'
-            }
-        }
-
-        stage('Employee Unit Tests') {
-            steps {
-                dir('python') {
-                    sh ' docker run --rm employee-app pytest python/tests/unit'
-                }
-            }
-        }
-
-        stage('Manager Unit Tests') {
-            steps {
-                dir('expense-app-managers') {
-                    sh ' docker run --rm manager-app mvn test -Dtest=JDBCManagerDAOTest'
-                }
             }
         }
 

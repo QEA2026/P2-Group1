@@ -34,7 +34,7 @@ pipeline {
         stage('Manager Unit Tests') {
             steps {
                 dir('expense-app-managers') {
-                    sh ' docker run --rm manager-app mvn clean test -Dtest=JDBCManagerDAOTest'
+                    sh ' docker run --rm manager-app mvn test -Dtest=JDBCManagerDAOTest'
                 }
             }
         }

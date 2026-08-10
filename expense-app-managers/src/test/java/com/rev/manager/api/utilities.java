@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.stream.Collectors;
@@ -79,7 +79,6 @@ public class utilities {
             String[] statements = sql.split(";");
 
             for (String statement : statements) {
-
                 statement = statement.trim();
 
                 if (!statement.isEmpty()) {
@@ -92,4 +91,16 @@ public class utilities {
                     "Failed executing SQL file: " + fileName, e);
         }
     }
+
+    private static void printExpenseCount(Connection conn, String label) throws SQLException {
+    try (Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM expenses")) {
+
+        if (rs.next()) {
+            System.out.println(label + ": " + rs.getInt(1));
+        }
+    }
 }
+}
+
+

@@ -378,9 +378,11 @@ public class test_manager_endpoints {
                 .response()
                 .jsonPath()
                 .getList("data");
+
             LinkedHashMap<String,String> sampleExp = expList.get(0);
             if(PRINT_DATA){System.out.println("Sample expense: "+sampleExp);}
             assertAllExpenseCategories(sampleExp);
+
         }
 
         @Test

@@ -8,17 +8,15 @@ services:
       EXPENSE_DB_PATH: /var/lib/expense-data/revExpenseData.db
     volumes:
       - vol-expense-database:/var/lib/expense-data
-    command: >
-      /bin/sh -c "mkdir -p /var/lib/expense-data && \
-      if [ ! -s /var/lib/expense-data/revExpenseData.db ]; then \
-      cp /app/revExpenseData.db /var/lib/expense-data/revExpenseData.db; \
-      fi && \
-      python python/api/app.py"
 
   employee-app-test:
     build:
       context: .
       dockerfile: python/Dockerfile.test-server
+    environment:
+      EXPENSE_DB_PATH: /var/lib/expense-data/testDatabase.db
+    volumes:
+      - vol-test-database:/var/lib/expense-data
 
   manager-app:
     build:
@@ -33,6 +31,10 @@ services:
     build:
       context: .
       dockerfile: expense-app-managers/Dockerfile.test-server
+    environment:
+      DATABASE_PATH: /var/lib/expense-data/testDatabase.db
+    volumes:
+      - vol-test-database:/var/lib/expense-data
 
   api-tests:
     build:
@@ -41,6 +43,9 @@ services:
     environment:
       EMPLOYEE_API_URL: http://employee-app-test:5000
       MANAGER_API_URL: http://manager-app-test:5001
+      DATABASE_PATH: /var/lib/expense-data/testDatabase.db
+    volumes:
+      - vol-test-database:/var/lib/expense-data
     depends_on:
       - employee-app-test
       - manager-app-test
@@ -69,4 +74,7 @@ services:
 
 volumes:
   vol-expense-database:
+    external: true
+
+  vol-test-database:
     external: true

@@ -84,3 +84,11 @@ In terminal: docker run -d -p 5000:5000 expense-python
 
 To run the Java app container, go into the expense-app-managers directory.
 In terminal: docker run -d -p 5001:5001 expense-manager-java
+
+## Running the pipeline
+docker compose down
+docker volume rm vol-test-database
+docker volume create vol-test-database
+docker compose build employee-app-test manager-app-test api-tests
+docker compose up -d employee-app-test manager-app-test
+docker compose run --rm api-tests

@@ -6,9 +6,17 @@ COPY python/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY python ./python
-COPY expense-app-managers/src/test/resources/testDatabase.db \
-     /app/expense-app-managers/src/test/resources/testDatabase.db
+COPY expense-app-managers/src/test/resources/testDatabase.db /app/testDatabase.db
+
+RUN mkdir -p /var/lib/expense-data
 
 EXPOSE 5000
 
-CMD ["python", "python/api/app.py", "testDatabase.db"]
+ENV EXPENSE_DB_PATH=/var/lib/expense-data/testDatabase.db
+
+CMD ["/bin/sh", "-c", "\
+if [ ! -f /var/lib/expense-data/testDatabase.db ]; then \
+    cp /app/testDatabase.db /var/lib/expense-data/testDatabase.db; \
+fi && \
+python python/api/app.py \
+"]

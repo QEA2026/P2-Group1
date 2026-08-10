@@ -100,10 +100,7 @@ pipeline {
 
         stage('Employee E2E Tests') {
             steps {
-                sh '''
-                    docker compose run e2e-tests
-                    docker compose down
-                '''
+                sh ' docker compose run --rm e2e-tests'
             }
         }
     }

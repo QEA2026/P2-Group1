@@ -19,4 +19,5 @@ ENV DATABASE_PATH=/app/revExpenseData.db
 
 EXPOSE 5001
 
-ENTRYPOINT ["java", "-jar", "app.jar", "/app/testDatabase.db"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
+# ENTRYPOINT ["java", "-jar", "app.jar", "/app/testDatabase.db"]

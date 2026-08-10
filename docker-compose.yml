@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: python/Dockerfile
     environment:
-      EXPENSE_DB_PATH: /var/lib/expense-data/revExpenseData.db
+      EXPENSE_DB_PATH: /app/revExpenseData.db
     # volumes:
     #   - vol-expense-database:/var/lib/expense-data
 

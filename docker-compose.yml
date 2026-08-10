@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: expense-app-managers/Dockerfile
     environment:
-      DATABASE_PATH: /var/lib/expense-data/revExpenseData.db
+      DATABASE_PATH: /app/revExpenseData.db
     ports:
       - "5001:5001"
     # volumes:

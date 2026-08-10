@@ -6,6 +6,8 @@ services:
       dockerfile: python/Dockerfile
     environment:
       EXPENSE_DB_PATH: /app/revExpenseData.db
+    ports:
+      - "5000:5000"
     # volumes:
     #   - vol-expense-database:/var/lib/expense-data
 
@@ -24,6 +26,8 @@ services:
       dockerfile: expense-app-managers/Dockerfile
     environment:
       DATABASE_PATH: /var/lib/expense-data/revExpenseData.db
+    ports:
+      - "5001:5001"
     # volumes:
     #   - vol-expense-database:/var/lib/expense-data
 

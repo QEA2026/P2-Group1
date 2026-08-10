@@ -4,6 +4,16 @@ services:
     build:
       context: .
       dockerfile: python/Dockerfile
+    environment:
+      EXPENSE_DB_PATH: /var/lib/expense-data/revExpenseData.db
+    volumes:
+      - vol-expense-database:/var/lib/expense-data
+    command: >
+      /bin/sh -c "mkdir -p /var/lib/expense-data && \
+      if [ ! -s /var/lib/expense-data/revExpenseData.db ]; then \
+      cp /app/revExpenseData.db /var/lib/expense-data/revExpenseData.db; \
+      fi && \
+      python python/api/app.py"
 
   employee-app-test:
     build:
@@ -14,6 +24,10 @@ services:
     build:
       context: .
       dockerfile: expense-app-managers/Dockerfile
+    environment:
+      DATABASE_PATH: /var/lib/expense-data/revExpenseData.db
+    volumes:
+      - vol-expense-database:/var/lib/expense-data
 
   manager-app-test:
     build:
@@ -52,3 +66,7 @@ services:
     depends_on:
       - employee-app
       - selenium
+
+volumes:
+  vol-expense-database:
+    external: true

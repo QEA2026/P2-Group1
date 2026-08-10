@@ -1,0 +1,18 @@
+# f9e69e2a0fe040818a194482856925db
+services:
+  jenkins:
+    build: .
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=true
+    restart: unless-stopped
+    user: root
+
+volumes:
+  jenkins_home:

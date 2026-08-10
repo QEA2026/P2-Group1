@@ -6,8 +6,8 @@ services:
       dockerfile: python/Dockerfile
     environment:
       EXPENSE_DB_PATH: /var/lib/expense-data/revExpenseData.db
-    volumes:
-      - vol-expense-database:/var/lib/expense-data
+    # volumes:
+    #   - vol-expense-database:/var/lib/expense-data
 
   employee-app-test:
     build:
@@ -24,8 +24,8 @@ services:
       dockerfile: expense-app-managers/Dockerfile
     environment:
       DATABASE_PATH: /var/lib/expense-data/revExpenseData.db
-    volumes:
-      - vol-expense-database:/var/lib/expense-data
+    # volumes:
+    #   - vol-expense-database:/var/lib/expense-data
 
   manager-app-test:
     build:

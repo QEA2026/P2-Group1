@@ -1,17 +1,17 @@
 package com.rev.manager.cucumber.utils;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class DriverFactory {
 
@@ -33,7 +33,7 @@ public class DriverFactory {
 
         if (driver == null) {
 
-            WebDriverManager.chromedriver().setup();
+            // WebDriverManager.chromedriver().setup();
 
             try {
                 Files.createDirectories(DOWNLOAD_DIRECTORY);
@@ -59,10 +59,27 @@ public class DriverFactory {
             options.setExperimentalOption("prefs", prefs);
 
             options.addArguments(
-                    "--start-maximized"
+                "--headless",
+                "--no-sandbox",
+                "--disable-dev-shm-usage"
             );
 
-            driver = new ChromeDriver(options);
+            String seleniumUrl = System.getenv().getOrDefault(
+                "SELENIUM_URL",
+                "http://localhost:4444"
+            );
+
+            try {
+                driver = new RemoteWebDriver(
+                    URI.create(seleniumUrl).toURL(),
+                    options
+                );
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(
+                    "Unable to connect to Selenium",
+                    e
+                );
+            }
         }
 
         return driver;

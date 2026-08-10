@@ -8,10 +8,10 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 
 public class DownloadHelper {
-    private static final Path DOWNLOAD_DIR = Paths.get(System.getProperty("user.dir"),
-                      "target",
-                      "downloads");
-
+    // private static final Path DOWNLOAD_DIR = Paths.get(System.getProperty("user.dir"),
+    //                   "target",
+    //                   "downloads");
+    private static final Path DOWNLOAD_DIR = Paths.get("/downloads");
 
     public static void clearDownloadDirectory() {
 
@@ -38,6 +38,24 @@ public class DownloadHelper {
         }
     }
     
+    // public static File waitForCsvDownload() {
+
+    //     File folder = DOWNLOAD_DIR.toFile();
+
+    //     long timeout = System.currentTimeMillis() + 10000;
+
+    //     while (System.currentTimeMillis() < timeout) {
+
+    //         File[] csvFiles = folder.listFiles(
+    //                 (dir, name) -> name.endsWith(".csv"));
+
+    //         if (csvFiles != null && csvFiles.length > 0) {
+    //             return csvFiles[0];
+    //         }
+    //     }
+
+    //     throw new RuntimeException("CSV was not downloaded.");
+    // }
     public static File waitForCsvDownload() {
 
         File folder = DOWNLOAD_DIR.toFile();
@@ -52,8 +70,17 @@ public class DownloadHelper {
             if (csvFiles != null && csvFiles.length > 0) {
                 return csvFiles[0];
             }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Interrupted while waiting for CSV", e);
+            }
         }
 
-        throw new RuntimeException("CSV was not downloaded.");
+        throw new RuntimeException(
+                "CSV was not downloaded to " + DOWNLOAD_DIR
+        );
     }
 }

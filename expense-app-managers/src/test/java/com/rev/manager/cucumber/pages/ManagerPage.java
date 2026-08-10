@@ -9,7 +9,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ManagerPage extends BasePage {
     
-    private static final String URL = "http://localhost:5001/manager.html";
+    private static final String URL =
+        System.getenv().getOrDefault(
+                "MANAGER_APP_URL",
+                "http://localhost:5001"
+        ) + "/manager.html";
 
     // ---------- Locators ----------
 

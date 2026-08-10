@@ -76,7 +76,13 @@ pipeline {
 
         stage('Employee E2E Tests') {
             steps {
-                sh ' docker compose run --rm e2e-tests'
+                sh ' docker compose run --rm employee-e2e-tests'
+            }
+        }
+
+        stage('Manager E2E Tests') {
+            steps {
+                sh ' docker compose run --rm manager-e2e-tests'
             }
         }
     }

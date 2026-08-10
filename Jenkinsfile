@@ -35,27 +35,6 @@ pipeline {
             }
         }
 
-        // stage('Build Deployment Employee Image') {
-        //     steps {
-        //         sh 'docker build -t employee-app -f python/Dockerfile .'
-        //     }
-        // }
-
-        // stage('Build Deployment Manager Image') {
-        //     steps {
-        //         sh 'docker build -t manager-app -f expense-app-managers/Dockerfile --build-arg DATABASE_FILE=expense-app-managers/src/test/resources/testDatabase.db .'
-        //     }
-        // }
-
-        // stage('Deploy Containers') {
-        //     steps {
-        //         sh '''
-        //             docker compose down --remove-orphans || true
-        //             docker compose up -d employee-app manager-app selenium
-        //         '''
-        //     }
-        // }
-
         stage('Create Test Database Volume') {
             steps {
                 sh '''
@@ -80,6 +59,27 @@ pipeline {
         stage('Manager API Tests') {
             steps {
                 sh ' docker compose run --rm api-tests mvn test -Dtest=test_manager_endpoints'
+            }
+        }
+
+        // stage('Build Deployment Employee Image') {
+        //     steps {
+        //         sh 'docker build -t employee-app -f python/Dockerfile .'
+        //     }
+        // }
+
+        // stage('Build Deployment Manager Image') {
+        //     steps {
+        //         sh 'docker build -t manager-app -f expense-app-managers/Dockerfile --build-arg DATABASE_FILE=expense-app-managers/src/test/resources/testDatabase.db .'
+        //     }
+        // }
+
+        stage('Deploy Containers') {
+            steps {
+                sh '''
+                    docker compose down --remove-orphans || true
+                    docker compose up -d employee-app manager-app selenium
+                '''
             }
         }
 

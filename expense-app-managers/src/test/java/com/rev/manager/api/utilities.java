@@ -19,7 +19,11 @@ import com.rev.manager.repository.DatabaseConnection;
  */
 public class utilities {
 
-    private static final String TEST_DATABASE = "testDatabase.db";
+    private static final String TEST_DATABASE =
+        System.getenv().getOrDefault(
+                "DATABASE_PATH",
+                "testDatabase.db"
+        );
 
     /**
      * Creates a connection to the test database.

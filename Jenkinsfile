@@ -3,15 +3,21 @@ pipeline {
 
     stages {
 
-        stage('Build Test Employee Image') {
-            steps {
-                sh ' docker build -t employee-test -f python/Dockerfile .'
-            }
-        }
+        // stage('Build Test Employee Image') {
+        //     steps {
+        //         sh ' docker build -t employee-test -f python/Dockerfile .'
+        //     }
+        // }
 
-        stage('Build Test Manager Image') {
+        // stage('Build Test Manager Image') {
+        //     steps {
+        //         sh ' docker build -t manager-test -f expense-app-managers/Dockerfile.test .'
+        //     }
+        // }
+
+        stage('Build Docker Images') {
             steps {
-                sh ' docker build -t manager-test -f expense-app-managers/Dockerfile.test .'
+                sh 'docker compose build'
             }
         }
 

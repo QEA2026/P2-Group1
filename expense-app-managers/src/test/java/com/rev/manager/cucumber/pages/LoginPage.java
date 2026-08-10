@@ -6,7 +6,11 @@ import org.openqa.selenium.WebDriver;
 public class LoginPage extends BasePage {
 
     // Login URL
-    private static final String URL = "http://localhost:5001";
+    private static final String URL =
+        System.getenv().getOrDefault(
+                "MANAGER_APP_URL",
+                "http://localhost:5001"
+        );
 
     // Locators
     private static final By USERNAME = By.id("username");

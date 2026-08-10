@@ -80,11 +80,18 @@ To execute Spike test, run with BOTH Regular Usage and Spike threads enabled.
 ## Running the containers:
 
 Python:
+
 Build the container first using:
+
 docker build -f python\Dockerfile -t expense-python .
+
 docker run -d -p 5000:5000 expense-python
 
+
 Java:
+
 Build the container first using:
+
 docker build -f expense-app-managers\Dockerfile -t expense-manager-java .
+
 In terminal: docker run -d -p 5001:5001 expense-manager-java

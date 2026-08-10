@@ -59,6 +59,8 @@ services:
     ports:
       - "4444:4444"
     shm_size: 2gb
+    volumes:
+      - e2e-downloads:/downloads
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:4444/status || exit 1"]
       interval: 10s
@@ -83,6 +85,8 @@ services:
     environment:
       SELENIUM_URL: http://selenium:4444/wd/hub
       MANAGER_APP_URL: http://manager-app:5001
+    volumes:
+      - e2e-downloads:/downloads
     depends_on:
       - manager-app
       - selenium
@@ -92,4 +96,7 @@ volumes:
     external: true
 
   vol-test-database:
+    external: true
+  
+  e2e-downloads:
     external: true

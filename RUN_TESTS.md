@@ -79,16 +79,19 @@ To execute Spike test, run with BOTH Regular Usage and Spike threads enabled.
 
 ## Running the containers:
 
-To run the Python app container, go into the python directory.
-In terminal: docker run -d -p 5000:5000 expense-python
+Python:
 
-To run the Java app container, go into the expense-app-managers directory.
+Build the container first using:
+
+docker build -f python\Dockerfile -t expense-python .
+
+docker run -d -p 5000:5000 expense-python
+
+
+Java:
+
+Build the container first using:
+
+docker build -f expense-app-managers\Dockerfile -t expense-manager-java .
+
 In terminal: docker run -d -p 5001:5001 expense-manager-java
-
-## Running the pipeline
-docker compose down
-docker volume rm vol-test-database
-docker volume create vol-test-database
-docker compose build employee-app-test manager-app-test api-tests
-docker compose up -d employee-app-test manager-app-test
-docker compose run --rm api-tests

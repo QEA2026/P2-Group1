@@ -77,6 +77,13 @@ To execute regular usage test, run test with only the Regular Usage thread enabl
 To execute Limit test, run with only Limit thread enabled.
 To execute Spike test, run with BOTH Regular Usage and Spike threads enabled.
 
+## Running Performance Tests in the VS code terminal:
+
+From the project root folder, Go to P1_Group1\python\api>
+2: Python app.py (Runs the (Flask) python backend)
+3: New terminal: jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l target\performance-results.jtl
+Should see a format similar to: summary +   xxxx in 00:00:09 =  xxx/s Avg:   xxxx Min:     x Max:  xxxx Err:   xxx (xx.xx%) Active: xxxx Started: xxx Finished: xxx
+
 ## Running the containers:
 
 Python:

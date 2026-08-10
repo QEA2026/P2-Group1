@@ -5,6 +5,11 @@ services:
       context: .
       dockerfile: python/Dockerfile
 
+  employee-app-test:
+    build:
+      context: .
+      dockerfile: python/Dockerfile.test-server
+
   manager-app:
     build:
       context: .
@@ -20,10 +25,10 @@ services:
       context: .
       dockerfile: expense-app-managers/Dockerfile.test
     environment:
-      EMPLOYEE_API_URL: http://employee-app:5000
+      EMPLOYEE_API_URL: http://employee-app-test:5000
       MANAGER_API_URL: http://manager-app-test:5001
     depends_on:
-      - employee-app
+      - employee-app-test
       - manager-app-test
 
   selenium:

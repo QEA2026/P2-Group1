@@ -56,6 +56,15 @@ pipeline {
         //     }
         // }
 
+        stage('Create Test Database Volume') {
+            steps {
+                sh '''
+                    docker volume inspect vol-test-database >/dev/null 2>&1 || \
+                    docker volume create vol-test-database
+                '''
+            }
+        }
+        
         stage('Start Test Servers') {
             steps {
                 sh ' docker compose up -d employee-app-test manager-app-test'

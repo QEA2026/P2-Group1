@@ -8,8 +8,6 @@ services:
       EXPENSE_DB_PATH: /app/revExpenseData.db
     ports:
       - "5000:5000"
-    ports:
-      - "5000:5000"
     # volumes:
     #   - vol-expense-database:/var/lib/expense-data
 

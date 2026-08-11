@@ -63,7 +63,7 @@ To run API tests, you need the employee and manager apps running on the test dat
 2: Python app.py (Runs the (Flask) python backend)
 3: New terminal - From the Project root folder, Go to P1_Group1\python\api\features then, type 'behave' (Should run the e2e testing simulation on browser.)
 
-## Running Performance Tests:
+## Running Performance Tests on JMeter:
 1: Run Manager App in one terminal
  - Go to directory expense-app-managers
  - mvn exec:java -D exec.mainClass="com.rev.manager.Main"
@@ -76,13 +76,6 @@ To run API tests, you need the employee and manager apps running on the test dat
 To execute regular usage test, run test with only the Regular Usage thread enabled. View results under summary report.
 To execute Limit test, run with only Limit thread enabled.
 To execute Spike test, run with BOTH Regular Usage and Spike threads enabled.
-
-## Running Performance Tests in the VS code terminal:
-
-From the project root folder, Go to P1_Group1\python\api>
-2: Python app.py (Runs the (Flask) python backend)
-3: New terminal: jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l target\performance-results.jtl
-Should see a format similar to: summary +   xxxx in 00:00:09 =  xxx/s Avg:   xxxx Min:     x Max:  xxxx Err:   xxx (xx.xx%) Active: xxxx Started: xxx Finished: xxx
 
 ## Running the containers:
 
@@ -102,3 +95,12 @@ Build the container first using:
 docker build -f expense-app-managers\Dockerfile -t expense-manager-java .
 
 In terminal: docker run -d -p 5001:5001 expense-manager-java
+
+## Running Performance Tests in the VS code terminal:
+
+Run both docker containers first, mentioned above.
+
+From the project root folder, Go to P1_Group1\python\api>
+2: Python app.py (Runs the (Flask) python backend)
+3: New terminal: jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l target\performance-results.jtl
+Should see a format similar to: summary +   xxxx in 00:00:09 =  xxx/s Avg:   xxxx Min:     x Max:  xxxx Err:   xxx (xx.xx%) Active: xxxx Started: xxx Finished: xxx

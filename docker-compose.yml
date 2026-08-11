@@ -85,9 +85,11 @@ services:
       context: .
       dockerfile: expense-app-managers/Dockerfile.e2e
     environment:
+      DOCKER: "true"
       SELENIUM_URL: http://selenium:4444/wd/hub
       MANAGER_APP_URL: http://manager-app-test:5001
       DATABASE_PATH: /var/lib/expense-data/testDatabase.db
+      DOWNLOAD_DIR: /downloads
     volumes:
       - e2e-downloads:/downloads
       - vol-test-database:/var/lib/expense-data

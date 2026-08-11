@@ -169,9 +169,18 @@ public class ManagerPage extends BasePage {
     }
 
     public String getAllExpenseStatus(String expenseId) {
-        int idx = findRowIndexById(allExpenseRows, ALL_COL_ID, expenseId);
-        if (idx < 0) return null;
-        return cellText(allExpenseRows, idx, ALL_COL_STATUS);
+        // int idx = findRowIndexById(allExpenseRows, ALL_COL_ID, expenseId);
+        // if (idx < 0) return null;
+        // return cellText(allExpenseRows, idx, ALL_COL_STATUS);
+        By statusCell = By.xpath(
+            "//div[@id='all-expenses-list']"
+            + "//table//tr[td[normalize-space()='" + expenseId + "']]"
+            + "/td[" + (ALL_COL_STATUS + 1) + "]"
+        );
+
+        return wait.until(
+            ExpectedConditions.visibilityOfElementLocated(statusCell)
+        ).getText().trim();
     }
 
     public String getAllExpenseReviewer(String expenseId) {

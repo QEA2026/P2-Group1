@@ -51,7 +51,7 @@ class ManagerDashboard {
     getFetchOptions(options = {}) {
         return {
             ...options,
-            credentials: 'same-origin', // Include cookies in request
+            credentials: 'include', // Include cookies in request
             headers: {
                 ...this.getAuthHeaders(),
                 ...options.headers
@@ -450,9 +450,18 @@ class ManagerDashboard {
         try {
             const response = await fetch(url, this.getFetchOptions());
             
+            console.log("=== REPORT DEBUG ===");
+            console.log("URL:", url);
+            console.log("Status:", response.status);
+            console.log("OK:", response.ok);
+            console.log("Content-Type:", response.headers.get("content-type"));
+
             if (response.ok) {
                 const blob = await response.blob();
                 
+                console.log("Blob size:", blob.size);
+                console.log("Blob type:", blob.type);
+
                 // Create download link
                 const downloadUrl = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -466,6 +475,11 @@ class ManagerDashboard {
                 this.showReportMessage('Report generated successfully!', 'success');
             } else {
                 const data = await response.json();
+
+                console.error("REPORT REQUEST FAILED");
+                console.error("Status:", response.status);
+                console.error("Response:", data);
+
                 this.showReportMessage(data.error || 'Failed to generate report', 'error');
             }
         } catch (error) {

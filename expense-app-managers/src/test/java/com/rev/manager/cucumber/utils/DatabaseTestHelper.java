@@ -12,7 +12,11 @@ import com.rev.manager.repository.DatabaseConnection;
 
 public final class DatabaseTestHelper {
 
-    private static final String TEST_DATABASE = "testDatabase.db";
+    private static final String TEST_DATABASE =
+        System.getenv().getOrDefault(
+                "DATABASE_PATH",
+                "testDatabase.db"
+        );
 
     private DatabaseTestHelper() {
     }

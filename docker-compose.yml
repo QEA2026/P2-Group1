@@ -66,6 +66,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    depends_on:
+      - e2e-downloads-init
 
   employee-e2e-tests:
     build:
@@ -84,12 +86,20 @@ services:
       dockerfile: expense-app-managers/Dockerfile.e2e
     environment:
       SELENIUM_URL: http://selenium:4444/wd/hub
-      MANAGER_APP_URL: http://manager-app:5001
+      MANAGER_APP_URL: http://manager-app-test:5001
+      DATABASE_PATH: /var/lib/expense-data/testDatabase.db
     volumes:
       - e2e-downloads:/downloads
+      - vol-test-database:/var/lib/expense-data
     depends_on:
-      - manager-app
+      - manager-app-test
       - selenium
+
+  e2e-downloads-init:
+    image: alpine:latest
+    command: sh -c "chmod 777 /downloads"
+    volumes:
+      - e2e-downloads:/downloads
 
 volumes:
   vol-expense-database:
@@ -99,4 +109,3 @@ volumes:
     external: true
   
   e2e-downloads:
-    external: true

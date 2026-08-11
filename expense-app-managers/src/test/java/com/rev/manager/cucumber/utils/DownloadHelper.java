@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 public class DownloadHelper {
     // private static final Path DOWNLOAD_DIR = Paths.get(System.getProperty("user.dir"),
@@ -18,19 +19,20 @@ public class DownloadHelper {
         Path downloadDirectory = DriverFactory.getDownloadDirectory();
 
         try {
-
             Files.createDirectories(downloadDirectory);
 
-            Files.list(downloadDirectory)
-                    .sorted(Comparator.reverseOrder())
-                    .forEach(path -> {
-                        try {
-                            Files.delete(path);
-                        } catch (IOException e) {
-                            throw new RuntimeException(
-                                    "Unable to delete: " + path, e);
-                        }
-                    });
+            try (Stream<Path> paths = Files.list(downloadDirectory)) {
+
+                paths.sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                throw new RuntimeException(
+                                        "Unable to delete: " + path, e);
+                            }
+                        });
+            }
 
         } catch (IOException e) {
             throw new RuntimeException(
@@ -56,31 +58,28 @@ public class DownloadHelper {
 
     //     throw new RuntimeException("CSV was not downloaded.");
     // }
-    public static File waitForCsvDownload() {
+    public static File waitForCsvDownload(String filename) {
 
-        File folder = DOWNLOAD_DIR.toFile();
+        File file = DOWNLOAD_DIR.resolve(filename).toFile();
 
         long timeout = System.currentTimeMillis() + 10000;
 
         while (System.currentTimeMillis() < timeout) {
 
-            File[] csvFiles = folder.listFiles(
-                    (dir, name) -> name.endsWith(".csv"));
-
-            if (csvFiles != null && csvFiles.length > 0) {
-                return csvFiles[0];
+            if (file.exists() && file.length() > 0) {
+                return file;
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                throw new RuntimeException("Interrupted while waiting for CSV", e);
+                throw new RuntimeException(e);
             }
         }
 
         throw new RuntimeException(
-                "CSV was not downloaded to " + DOWNLOAD_DIR
+            "CSV was not downloaded to /downloads: " + filename
         );
     }
 }

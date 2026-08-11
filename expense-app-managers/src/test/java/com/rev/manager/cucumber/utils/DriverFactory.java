@@ -1,9 +1,7 @@
 package com.rev.manager.cucumber.utils;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -19,11 +17,7 @@ public class DriverFactory {
     /**
      * Directory where Chrome will automatically download files.
      */
-    private static final Path DOWNLOAD_DIRECTORY = Paths.get(
-            System.getProperty("user.dir"),
-            "target",
-            "downloads"
-    );
+    private static final Path DOWNLOAD_DIRECTORY = Paths.get("/downloads");
     
     private DriverFactory() {
         // Prevent instantiation
@@ -35,21 +29,22 @@ public class DriverFactory {
 
             // WebDriverManager.chromedriver().setup();
 
-            try {
-                Files.createDirectories(DOWNLOAD_DIRECTORY);
-            } catch (IOException e) {
-                throw new RuntimeException(
-                        "Unable to create download directory.",
-                        e
-                );
-            }
+            // try {
+            //     Files.createDirectories(DOWNLOAD_DIRECTORY);
+            // } catch (IOException e) {
+            //     throw new RuntimeException(
+            //             "Unable to create download directory.",
+            //             e
+            //     );
+            // }
 
             Map<String, Object> prefs = new HashMap<>();
 
-            prefs.put(
-                    "download.default_directory",
-                    DOWNLOAD_DIRECTORY.toAbsolutePath().toString()
-            );
+            // prefs.put(
+            //         "download.default_directory",
+            //         DOWNLOAD_DIRECTORY.toAbsolutePath().toString()
+            // );
+            prefs.put("download.default_directory", "/downloads");
             prefs.put("download.prompt_for_download", false);
             prefs.put("download.directory_upgrade", true);
             prefs.put("safebrowsing.enabled", true);

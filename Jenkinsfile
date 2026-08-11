@@ -54,7 +54,7 @@ pipeline {
             steps {
                 sh '''
                     docker compose down --remove-orphans || true
-                    docker compose up -d employee-app manager-app selenium
+                    docker compose up -d employee-app manager-app-test selenium
                 '''
             }
         }

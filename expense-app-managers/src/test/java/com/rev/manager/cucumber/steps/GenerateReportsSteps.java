@@ -22,7 +22,9 @@ import io.cucumber.java.en.When;
 public class GenerateReportsSteps {
 
     private final ManagerPage managerPage;
+    private String expectedReportFilename;
     private File downloadedReport;
+    private String category;
 
     public GenerateReportsSteps() {
         managerPage = new ManagerPage(DriverFactory.getDriver());
@@ -30,17 +32,32 @@ public class GenerateReportsSteps {
 
     @When("the manager generates an employee report for {string}")
     public void generateReportByEmployee(String employee) {
+        expectedReportFilename = "employee_" + employee + "_report.csv";
         managerPage.goToReports();
         managerPage.generateEmployeeReport(employee);
     }
 
     @When("the manager generates a category report for {string}")
     public void generateReportByCategory(String category) {
+        expectedReportFilename = "category_" + category + "_report.csv";
         managerPage.goToReports();
         managerPage.generateCategoryReport(category);
     }
+
     @When("the manager generates a date range report from {string} to {string}")
     public void generateReportByDateRange(String startDate, String endDate) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
+
+        DateTimeFormatter outputFormatter =  DateTimeFormatter.ISO_LOCAL_DATE;
+
+        LocalDate start = LocalDate.parse(startDate, inputFormatter);
+
+        LocalDate end = LocalDate.parse(endDate, inputFormatter);
+
+        String formattedStart = start.format(outputFormatter);
+        String formattedEnd = end.format(outputFormatter);
+
+        expectedReportFilename = "expenses_" + formattedStart + "_to_" + formattedEnd + "_report.csv";
         managerPage.goToReports();
         managerPage.generateDateRangeReport(startDate, endDate);
     }
@@ -53,7 +70,7 @@ public class GenerateReportsSteps {
     @And("a CSV report should be downloaded")
     public void csvReportShouldBeDownloaded() {
 
-        downloadedReport  = DownloadHelper.waitForCsvDownload();
+        downloadedReport  = DownloadHelper.waitForCsvDownload(expectedReportFilename);
 
         assertTrue(downloadedReport.exists());
         assertTrue(downloadedReport.length() > 0);

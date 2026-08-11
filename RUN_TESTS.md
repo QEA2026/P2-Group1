@@ -106,3 +106,6 @@ From the project root folder, Go to P1_Group1\python\api>
 3: New terminal (run this at least twice for the tests to execute): jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l target\performance-results.jtl
 Should see a format similar to: summary +   xxxx in 00:00:09 =  xxx/s Avg:   xxxx Min:     x Max:  xxxx Err:   xxx (xx.xx%) Active: xxxx Started: xxx Finished: xxx
 To restore the database (simple, lazy way): git restore revExpenseData.db
+
+## Running Employee App Connected to AWS Database
+python python\api\app.py AWS

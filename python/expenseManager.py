@@ -8,12 +8,17 @@ class ManagerDecisionError(Exception):
     pass
 
 #TODO: Take in a cursor object from the employee.py for all transactions.
+def convert_sqlite_postgre(prompt: str) -> str:
+    '''Changes the syntax of a prompt from sqlite syntax to PostgreSQL syntax.
+    Replaces instances of ? with %s'''
+    return prompt.replace("?", "%s")
+
 class ExpenseManager:
     ''' Class with some helper utility functions for the employee.py, for any function that edits the database directly.
 
     Includes add_expense, edit_expense, and remove_expense.'''
     @classmethod
-    def date_conversion(cls, date : str) -> str:
+    def date_conversion(cls, date : str, convert_syntax : bool = False) -> str:
         ''' Converts the specified date to YYYY/MM/DD format
         Current format is MM/DD/YYYY
         '''
@@ -27,7 +32,7 @@ class ExpenseManager:
         return dateStr
     
 
-    def add_expense(emp, amount : float, description : str, category : str) -> int:
+    def add_expense(emp, amount : float, description : str, category : str, convert_syntax : bool = False) -> int:
         ''' Adds an entry with the specified amount and description to the expenses 
         table (also adds an entry to the approvals table), the employee id 
         associated with the employee submitting the expense
@@ -38,20 +43,29 @@ class ExpenseManager:
         dbCursor = emp.connection.cursor()
         assign_id = random.randint(1, 2999)
         while dbCursor.fetchone != None:
-            dbCursor.execute("SELECT * FROM expenses WHERE id = ?", (assign_id,))
+            prompt = "SELECT * FROM expenses WHERE id = ?"
+            if convert_syntax:
+                prompt = convert_sqlite_postgre(prompt)
+            dbCursor.execute(prompt, (assign_id,))
             result = dbCursor.fetchall()
             if len(result) != 0:
                 assign_id = random.randint(1, 2999)
             else:
                 break
-        dbCursor.execute("INSERT INTO expenses (id, user_id, amount, description, date, category) VALUES (?, ?, FLOOR(? * 100) / 100.0, ?, ?, ?)", (assign_id, emp.id, amount, description, ExpenseManager.date_conversion(datetime.datetime.now().strftime("%m/%d/%Y")), category))
+        prompt = "INSERT INTO expenses (id, user_id, amount, description, date, category) VALUES (?, ?, FLOOR(? * 100) / 100.0, ?, ?, ?)"
+        if convert_syntax:
+            prompt = convert_sqlite_postgre(prompt)
+        dbCursor.execute(prompt, (assign_id, emp.id, amount, description, ExpenseManager.date_conversion(datetime.datetime.now().strftime("%m/%d/%Y")), category))
         pending_null = None
-        dbCursor.execute("INSERT INTO approvals (id, expense_id, status, reviewer, comment, review_date) VALUES (?, ?, ?, ?, ?, ?)", (assign_id, assign_id, "pending", pending_null, pending_null, pending_null))
+        prompt = "INSERT INTO approvals (id, expense_id, status, reviewer, comment, review_date) VALUES (?, ?, ?, ?, ?, ?)"
+        if convert_syntax:
+            prompt = convert_sqlite_postgre(prompt)
+        dbCursor.execute(prompt, (assign_id, assign_id, "pending", pending_null, pending_null, pending_null))
         emp.connection.commit()
         dbCursor.close()
         return assign_id
 
-    def edit_expense(emp, id : int, amount : float, description : str, category : str) -> None:
+    def edit_expense(emp, id : int, amount : float, description : str, category : str, convert_syntax : bool = False) -> None:
         ''' Edits the expense with the specified id, amount, and description.
         Calls the instance method view_expense_status in the employee class
         to check if the expense is pending.
@@ -64,14 +78,17 @@ class ExpenseManager:
         status = emp.view_expense_status(id)
         if status == "pending":
             dbCursor = emp.connection.cursor()
-            dbCursor.execute("UPDATE expenses SET amount = FLOOR(? * 100) / 100.0, description = ?, date = ?, category = ? WHERE id = ?", (amount, description, ExpenseManager.date_conversion(datetime.datetime.now().strftime("%m/%d/%Y")), category, id))
+            prompt = "UPDATE expenses SET amount = FLOOR(? * 100) / 100.0, description = ?, date = ?, category = ? WHERE id = ?"
+            if convert_syntax:
+                prompt = convert_sqlite_postgre(prompt)
+            dbCursor.execute(prompt, (amount, description, ExpenseManager.date_conversion(datetime.datetime.now().strftime("%m/%d/%Y")), category, id))
             emp.connection.commit()
             dbCursor.close()
 
         else:
             raise ManagerDecisionError(f"Sorry, a manager has made the decision for this expense. It has been {status}.")
 
-    def remove_expense(emp, id : int) -> None:
+    def remove_expense(emp, id : int, convert_syntax : bool = False) -> None:
         ''' Removes the expense from the list given the specified id.
         Calls the instance method view_expense_status in the employee class
         to check if the expense is pending. If expense is not pending, a 
@@ -85,8 +102,14 @@ class ExpenseManager:
         status = emp.view_expense_status(id)
         if status == "pending":
             dbCursor = emp.connection.cursor()
-            dbCursor.execute("DELETE from expenses WHERE id = ?", (id,))
-            dbCursor.execute("DELETE from approvals WHERE expense_id = ?", (id,))
+            prompt = "DELETE from expenses WHERE id = ?"
+            if convert_syntax:
+                prompt = convert_sqlite_postgre(prompt)
+            dbCursor.execute(prompt, (id,))
+            prompt = "DELETE from approvals WHERE expense_id = ?"
+            if convert_syntax:
+                prompt = convert_sqlite_postgre(prompt)
+            dbCursor.execute(prompt, (id,))
             dbCursor.close()
             emp.connection.commit()
         else:

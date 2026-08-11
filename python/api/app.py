@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import sqlite3
 import sys
+from aws_connecter import get_aws_connection
 
 from flask import Flask, jsonify, request, session, render_template
 from flask_cors import CORS
@@ -9,6 +10,8 @@ from flask_cors import CORS
 
 # Make employee.py and expenseManager.py importable from the parent folder.
 PYTHON_DIRECTORY = Path(__file__).resolve().parent.parent
+
+isPostgreConnection = False # Determins if the connection is to a PostgreSQL database. Needed to determine what syntax is used in the SQL commands.
 
 if str(PYTHON_DIRECTORY) not in sys.path:
     sys.path.insert(0, str(PYTHON_DIRECTORY))
@@ -53,6 +56,9 @@ if len(sys.argv) < 2:
         DATABASE_PATH = Path(database_override)
     else:
         DATABASE_PATH = PYTHON_DIRECTORY.parent / "revExpenseData.db"
+elif sys.argv[1] == "AWS":
+    DATABASE_PATH = "AWS"
+    isPostgreConnection = True
 else: #sys.argv[1] is the name of the test database to use in the resources folder of the expense-app-managers resources files, for testing usage only
     DATABASE_PATH = PYTHON_DIRECTORY.parent / "expense-app-managers" / "src" / "test" / "resources" / sys.argv[1]
 
@@ -72,13 +78,17 @@ def create_authenticated_employee():
             "Sorry, you are not signed in. Please sign in first."
         )
 
-    connection = sqlite3.connect(DATABASE_PATH)
+    if DATABASE_PATH == "AWS":
+        connection = get_aws_connection()
+    else:
+        connection = sqlite3.connect(DATABASE_PATH)
 
     employee = Employee(
         id=employee_id,
         username=username,
         password="",
         connection=connection,
+        convert_syntax=isPostgreConnection
     )
 
     employee.signed_in = True
@@ -160,7 +170,10 @@ def login():
             "message": "Password is required.",
         }), 400
 
-    connection = sqlite3.connect(DATABASE_PATH)
+    if DATABASE_PATH == "AWS":
+        connection = get_aws_connection()
+    else:
+        connection = sqlite3.connect(DATABASE_PATH)
 
     try:
         employee = Employee(
@@ -168,6 +181,7 @@ def login():
             username=username.strip(),
             password=password,
             connection=connection,
+            convert_syntax=isPostgreConnection
         )
 
         employee.login(username.strip(), password)

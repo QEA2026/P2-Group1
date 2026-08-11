@@ -34,6 +34,11 @@ class IdNotFoundError(Exception):
     ''' Expense id could not be found in expenses table for this employee. '''
     pass
 
+def convert_sqlite_postgre(prompt: str) -> str:
+    '''Changes the syntax of a prompt from sqlite syntax to PostgreSQL syntax.
+    Replaces instances of ? with %s'''
+    return prompt.replace("?", "%s")
+
 class Employee:
     '''Represents one of the Employees in the user table, with an id, username, password, a logged in status, and a connection to the database.
 
@@ -43,7 +48,7 @@ class Employee:
     Remember to close the passed in database connection object when it is no longer needed, the employee object will never close it.
     '''
     
-    def __init__(self, id : int, username : str, password : str, connection : sqlite3.Connection = None, attempt_login = False):
+    def __init__(self, id : int, username : str, password : str, connection = None, attempt_login = False, convert_syntax : bool = False):
         ''' Constructor for the Employee class,
         set signed_in to false by default.
         A connection object should be passed in, but if no connection object is passed in, defaults to connecting to revExpenseData.db, and this connection will never be closed.
@@ -53,6 +58,7 @@ class Employee:
         self.username = username
         self.password = password
         self.signed_in = False
+        self.convert_syntax = convert_syntax
         if(connection is not None):
             self.connection = connection
         else:
@@ -66,7 +72,10 @@ class Employee:
         
         Raises an InvalidLoginError if an incorrect Username and Password combination are entered'''
         dbCursor = self.connection.cursor()
-        dbCursor.execute("SELECT * FROM users WHERE username == ?", (username,))
+        query = "SELECT * FROM users WHERE username = ?"
+        if(self.convert_syntax):
+            query = convert_sqlite_postgre(query)
+        dbCursor.execute(query, (username,))
         user_entry = dbCursor.fetchone()
         if (user_entry is not None) and user_entry[2] == password and user_entry[3] == "Employee":
             self.signed_in = True
@@ -99,7 +108,7 @@ class Employee:
             elif len(description.strip()) == 0:
                 raise ValueError("Sorry, the description cannot be empty.")
             else:
-                return ExpenseManager.add_expense(self, amount, description, category)
+                return ExpenseManager.add_expense(self, amount, description, category, convert_syntax=self.convert_syntax)
         else:
             raise NotSignedInError("Sorry, you are not signed in. Please sign in first.")
     
@@ -117,13 +126,19 @@ class Employee:
         if self.signed_in == True:
 
             dbCursor = self.connection.cursor()
-            dbCursor.execute("SELECT * FROM expenses WHERE user_id == ? AND id == ?", (self.id, expense_id))
+            query = "SELECT * FROM expenses WHERE user_id = ? AND id = ?"
+            if(self.convert_syntax):
+                query = convert_sqlite_postgre(query)
+            dbCursor.execute(query, (self.id, expense_id))
             results = dbCursor.fetchall()
             matched = False
             for entry in results:
                 if entry[0] == expense_id:
                     matched = True
-            dbCursor.execute("SELECT * FROM approvals WHERE expense_id == ?", (expense_id,))
+            query = "SELECT * FROM approvals WHERE expense_id = ?"
+            if(self.convert_syntax):
+                query = convert_sqlite_postgre(query)
+            dbCursor.execute(query, (expense_id,))
             approval_entry = dbCursor.fetchone()
             dbCursor.close()
             if matched and (approval_entry is not None):
@@ -152,7 +167,7 @@ class Employee:
             elif len(description.strip()) == 0:
                 raise ValueError("Sorry, the description cannot be empty.")
             else:
-                ExpenseManager.edit_expense(self, expense_id, amount, description, category)
+                ExpenseManager.edit_expense(self, expense_id, amount, description, category, convert_syntax=self.convert_syntax)
         else:
             raise NotSignedInError("Sorry, you are not signed in. Please sign in first.")
 
@@ -165,7 +180,7 @@ class Employee:
         Raises a ManagerDecisionError if the expense is found in the database but has already been approved or denied by a manager.
         '''
         if self.signed_in == True:
-            ExpenseManager.remove_expense(self, expense_id)
+            ExpenseManager.remove_expense(self, expense_id, convert_syntax=self.convert_syntax)
         else:
             raise NotSignedInError("Sorry, you are not signed in. Please sign in first.")
         
@@ -183,8 +198,10 @@ class Employee:
             "e.id, e.user_id, e.amount, e.description, a.status, a.comment, a.review_date " \
             "FROM expenses AS e " \
             "INNER JOIN approvals AS a ON a.expense_id = e.id " \
-            "WHERE e.user_id == ? AND a.status != 'pending'" \
+            "WHERE e.user_id = ? AND a.status != 'pending'" \
             "ORDER BY a.review_date DESC"
+            if self.convert_syntax:
+                select_state = convert_sqlite_postgre(select_state)
             dbCursor = self.connection.cursor()
             dbCursor.execute(select_state, (self.id, ))
             entries = dbCursor.fetchall()
@@ -216,10 +233,12 @@ class Employee:
         statement = "SELECT e.id, e.amount, e.description, e.date, e.category, a.status " \
                         "FROM expenses e JOIN approvals a " \
                         "ON e.id = a.expense_id " \
-                        "WHERE e.user_id == ?"
+                        "WHERE e.user_id = ?"
         if only_pending:
             statement += " AND a.status = 'pending'"
         statement += " ORDER BY a.status"
+        if self.convert_syntax:
+            statement = convert_sqlite_postgre(statement)
         dbCursor.execute(statement, (self.id,))
         entries = dbCursor.fetchall()
         dbCursor.close()

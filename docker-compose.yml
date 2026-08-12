@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: expense-app-managers/Dockerfile
     environment:
-      DATABASE_PATH: /app/revExpenseData.db
+      TEST_DATABASE_PATH: /app/revExpenseData.db
     ports:
       - "5001:5001"
     # volumes:
@@ -36,7 +36,7 @@ services:
       context: .
       dockerfile: expense-app-managers/Dockerfile.test-server
     environment:
-      DATABASE_PATH: /var/lib/expense-data/testDatabase.db
+      TEST_DATABASE_PATH: /var/lib/expense-data/testDatabase.db
     volumes:
       - vol-test-database:/var/lib/expense-data
 
@@ -47,7 +47,7 @@ services:
     environment:
       EMPLOYEE_API_URL: http://employee-app-test:5000
       MANAGER_API_URL: http://manager-app-test:5001
-      DATABASE_PATH: /var/lib/expense-data/testDatabase.db
+      TEST_DATABASE_PATH: /var/lib/expense-data/testDatabase.db
     volumes:
       - vol-test-database:/var/lib/expense-data
     depends_on:
@@ -88,7 +88,7 @@ services:
       DOCKER: "true"
       SELENIUM_URL: http://selenium:4444/wd/hub
       MANAGER_APP_URL: http://manager-app-test:5001
-      DATABASE_PATH: /var/lib/expense-data/testDatabase.db
+      TEST_DATABASE_PATH: /var/lib/expense-data/testDatabase.db
       DOWNLOAD_DIR: /downloads
     volumes:
       - e2e-downloads:/downloads

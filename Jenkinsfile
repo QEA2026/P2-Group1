@@ -19,7 +19,7 @@ pipeline {
 
         stage('Manager Unit Tests') {
             steps {
-                sh ' docker compose run --rm manager-app-test mvn test -Dtest=JDBCManagerDAOTest'
+                sh ' docker compose run --rm manager-unit-tests mvn test -Dtest=JDBCManagerDAOTest'
             }
         }
 

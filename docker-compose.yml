@@ -31,6 +31,13 @@ services:
     # volumes:
     #   - vol-expense-database:/var/lib/expense-data
 
+  manager-unit-tests:
+    build:
+      context: .
+      dockerfile: expense-app-managers/Dockerfile.unit-test
+    # environment:
+    #   TEST_DATABASE_PATH: /var/lib/expense-data/testDatabase.db
+      
   manager-app-test:
     build:
       context: .

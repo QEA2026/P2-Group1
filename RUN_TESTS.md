@@ -110,5 +110,6 @@ To restore the database (simple, lazy way): git restore revExpenseData.db
 2: Go into the expense-app-managers directory.
 3: Run in the terminal: mvn -Dtest=PassConditions test
 
-## Running Employee App Connected to AWS Database
+## Running App Connected to AWS Database
 python python\api\app.py AWS
+mvn exec:java "-Dexec.mainClass=com.rev.manager.Main" "-Dexec.args=AWS" (from expense-app-managers)

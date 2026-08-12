@@ -175,6 +175,21 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Remove the old com.jcraft artifact and replace it with this -->
+        <dependency>
+            <groupId>com.github.mwiede</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.2.20</version> <!-- Use the latest available version -->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.4</version> <!-- Use the latest stable version -->
+        </dependency>
+
+
     </dependencies>
 
     

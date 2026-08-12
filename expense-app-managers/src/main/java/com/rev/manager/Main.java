@@ -30,10 +30,12 @@ public class Main {
     public static void main(String[] args) {
         // Initialize dependencies using constructor dependency injection
         DatabaseConnection databaseConnection;
-        if(args.length == 0)
+        if(args.length == 0){
             databaseConnection = new DatabaseConnection();
-        else
+        }
+        else{
             databaseConnection = new DatabaseConnection(args[0]);
+        }
         
         // Repository layer
         UserRepository userRepository = new UserRepository(databaseConnection);

@@ -30,8 +30,14 @@ public class DatabaseConnection {
     }
 
     private DatabaseConnection(String requestedPath, boolean allowCreateIfMissing) {
-        this.allowCreateIfMissing = allowCreateIfMissing;
-        this.databasePath = resolvePath(requestedPath);
+        if(requestedPath.equals("AWS")){
+            this.databasePath = "AWS";
+            this.allowCreateIfMissing = false;
+        }
+        else{
+            this.allowCreateIfMissing = allowCreateIfMissing;
+            this.databasePath = resolvePath(requestedPath);
+        }
         System.setProperty("databasePath", this.databasePath);
     }
 
@@ -41,6 +47,9 @@ public class DatabaseConnection {
      * @throws SQLException if connection fails
      */
     public Connection getConnection() throws SQLException {
+        if(this.databasePath.equals("AWS")){
+            return AWSDatabaseConnection.get_aws_connection();
+        }
         String resolvedPath = resolvePath(databasePath);
         Path resolvedFile = Paths.get(resolvedPath).toAbsolutePath().normalize();
         Path parent = resolvedFile.getParent();

@@ -38,11 +38,11 @@ pipeline {
             }
         }
 
-        // stage('Employee API Tests') {
-        //     steps {
-        //         sh ' docker compose run --rm api-tests mvn test -Dtest=test_emp_endpoints'
-        //     }
-        // }
+        stage('Employee API Tests') {
+            steps {
+                sh ' docker compose run --rm api-tests mvn test -Dtest=test_emp_endpoints'
+            }
+        }
 
         stage('Manager API Tests') {
             steps {

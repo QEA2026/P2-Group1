@@ -23,7 +23,7 @@ RUN mkdir -p /var/lib/expense-data
 
 EXPOSE 5001
 
-ENV DATABASE_PATH=/var/lib/expense-data/testDatabase.db
+ENV TEST_DATABASE_PATH=/var/lib/expense-data/testDatabase.db
 
 ENTRYPOINT ["sh", "-c", "\
 if [ ! -f /var/lib/expense-data/testDatabase.db ]; then \

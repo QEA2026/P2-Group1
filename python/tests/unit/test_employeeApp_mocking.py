@@ -39,7 +39,7 @@ class TestEmployeeAppMocking(unittest.TestCase):
         mock_conn.cursor.return_value = mock_cursor
         emp = Employee(0, "Bob", "bob_22", connection=mock_conn)
         emp.login("Bob", "bob_22")
-        mock_cursor.execute.assert_called_once_with("SELECT * FROM users WHERE username == ?", ("Bob",))
+        mock_cursor.execute.assert_called_once_with("SELECT * FROM users WHERE username = ?", ("Bob",))
         mock_cursor.fetchone.assert_called_once()
         mock_conn.cursor.assert_called_once()
         mock_cursor.close.assert_called_once()
@@ -56,7 +56,7 @@ class TestEmployeeAppMocking(unittest.TestCase):
     def test_submit_expense_uses_expense_manager(self, mock_add_expense):
         mock_add_expense.return_value = 777
         status = self.employee.submit_expense(100.0, "Pens and pencils", "Office")
-        mock_add_expense.assert_called_once_with(self.employee, 100.0, "Pens and pencils", "Office")
+        mock_add_expense.assert_called_once_with(self.employee, 100.0, "Pens and pencils", "Office", convert_syntax=False)
         assert status == 777
 
     @patch("expenseManager.random.randint", return_value = 123)
@@ -82,17 +82,17 @@ class TestEmployeeAppMocking(unittest.TestCase):
         with self.assertRaises(employee.IdNotFoundError):
             self.employee.view_expense_status(999)
         self.mock_cursor.close.assert_called_once()
-        self.mock_cursor.execute.assert_any_call("SELECT * FROM expenses WHERE user_id == ? AND id == ?", (1, 999))
-        self.mock_cursor.execute.assert_any_call("SELECT * FROM approvals WHERE expense_id == ?", (999,))        
+        self.mock_cursor.execute.assert_any_call("SELECT * FROM expenses WHERE user_id = ? AND id = ?", (1, 999))
+        self.mock_cursor.execute.assert_any_call("SELECT * FROM approvals WHERE expense_id = ?", (999,))        
     
     def test_view_expense_status_queries_expenses_and_approvals(self):
         self.mock_cursor.fetchall.return_value = [(42, 1, 100.0, "desc", "2026-01-01", "Other")]
         self.mock_cursor.fetchone.return_value = (42, 42, "pending", None, None, None)
         exp_status = self.employee.view_expense_status(42)
         self.mock_cursor.execute.assert_any_call(
-            "SELECT * FROM expenses WHERE user_id == ? AND id == ?", (1, 42))
+            "SELECT * FROM expenses WHERE user_id = ? AND id = ?", (1, 42))
         self.mock_cursor.execute.assert_any_call(
-            "SELECT * FROM approvals WHERE expense_id == ?", (42,))
+            "SELECT * FROM approvals WHERE expense_id = ?", (42,))
         self.mock_cursor.close.assert_called_once()
         assert exp_status == "pending"
 
@@ -136,7 +136,7 @@ class TestEmployeeAppMocking(unittest.TestCase):
             "SELECT e.id, e.amount, e.description, e.date, e.category, a.status "
             "FROM expenses e JOIN approvals a "
             "ON e.id = a.expense_id "
-            "WHERE e.user_id == ? AND a.status = 'pending'"
+            "WHERE e.user_id = ? AND a.status = 'pending'"
             " ORDER BY a.status", (1,),)
         assert list_exp == [(10, 123.0, "Lunch", "2026-05-01", "Food", "pending")]
 
@@ -150,7 +150,7 @@ class TestEmployeeAppMocking(unittest.TestCase):
             "SELECT e.id, e.user_id, e.amount, e.description, a.status, a.comment, a.review_date "
             "FROM expenses AS e "
             "INNER JOIN approvals AS a ON a.expense_id = e.id "
-            "WHERE e.user_id == ? AND a.status != 'pending'"
+            "WHERE e.user_id = ? AND a.status != 'pending'"
             "ORDER BY a.review_date DESC", (1,),)
         
     def test_view_expense_history_uses_magicmock_description(self):

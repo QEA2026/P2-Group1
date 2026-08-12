@@ -53,8 +53,9 @@ For the test reports:
 To run API tests, you need the employee and manager apps running on the test database in their own terminals.
 1: python python\api\app.py testDatabase.db
 2: mvn exec:java "-Dexec.mainClass=com.rev.manager.Main" "-Dexec.args=testDatabase.db" (from expense-app-managers directory)
-3: mvn test -Dtest=test_emp_endpoints
-4: mvn test -Dtest=test_manager_endpoints
+3: Open a new terminal and go into the expense-app-managers directory.
+4: mvn test -Dtest=test_emp_endpoints
+5: mvn test -Dtest=test_manager_endpoints
 
 
 ## Running E2E Employee App Test:
@@ -102,5 +103,9 @@ Run both docker containers first, mentioned above.
 
 From the project root folder, Go to P1_Group1\python\api>
 2: Python app.py (Runs the (Flask) python backend)
-3: New terminal: jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l target\performance-results.jtl
+3: New terminal (run this at least twice for the tests to execute): jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l target\performance-results.jtl
 Should see a format similar to: summary +   xxxx in 00:00:09 =  xxx/s Avg:   xxxx Min:     x Max:  xxxx Err:   xxx (xx.xx%) Active: xxxx Started: xxx Finished: xxx
+To restore the database (simple, lazy way): git restore revExpenseData.db
+
+## Running Employee App Connected to AWS Database
+python python\api\app.py AWS

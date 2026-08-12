@@ -3,7 +3,7 @@ services:
   jenkins:
     build:
       context: .
-      dockerfile: jenkins-setup/Dockerfile
+      dockerfile: Dockerfile
     container_name: jenkins
     ports:
       - "8080:8080"

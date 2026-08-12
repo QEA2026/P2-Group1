@@ -15,7 +15,7 @@ COPY --from=build /workspace/target/expense-app-managers-1.0-SNAPSHOT.jar app.ja
 # Runtime database
 COPY revExpenseData.db /app/revExpenseData.db
 
-ENV DATABASE_PATH=/app/revExpenseData.db
+ENV TEST_DATABASE_PATH=/app/revExpenseData.db
 
 EXPOSE 5001
 

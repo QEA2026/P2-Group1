@@ -14,7 +14,7 @@ public final class DatabaseTestHelper {
 
     private static final String TEST_DATABASE =
         System.getenv().getOrDefault(
-                "DATABASE_PATH",
+                "TEST_DATABASE_PATH",
                 "testDatabase.db"
         );
 

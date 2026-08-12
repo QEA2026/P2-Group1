@@ -12,14 +12,14 @@ pipeline {
         stage('Employee Unit Tests') {
             steps {
                 dir('python') {
-                    sh ' docker run --rm employee-app pytest python/tests/unit'
+                    sh ' docker compose run --rm employee-app pytest python/tests/unit'
                 }
             }
         } 
 
         stage('Manager Unit Tests') {
             steps {
-                sh ' docker run --rm manager-test mvn test -Dtest=JDBCManagerDAOTest'
+                sh ' docker compose run --rm manager-test mvn test -Dtest=JDBCManagerDAOTest'
             }
         }
 

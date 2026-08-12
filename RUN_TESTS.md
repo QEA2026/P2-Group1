@@ -101,11 +101,14 @@ In terminal: docker run -d -p 5001:5001 expense-manager-java
 
 Run both docker containers first, mentioned above.
 
-From the project root folder, Go to P1_Group1\python\api>
+1: From the project root folder, Go to P1_Group1\python\api>
 2: Python app.py (Runs the (Flask) python backend)
-3: New terminal (run this at least twice for the tests to execute): jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l target\performance-results.jtl
+3: New terminal: jmeter -n -t expense-app-managers/src/test/java/com/rev/manager/jmeter/Expense_App_Tests.jmx -l expense-app-managers\targetJmeter\performance-results.jtl
 Should see a format similar to: summary +   xxxx in 00:00:09 =  xxx/s Avg:   xxxx Min:     x Max:  xxxx Err:   xxx (xx.xx%) Active: xxxx Started: xxx Finished: xxx
 To restore the database (simple, lazy way): git restore revExpenseData.db
+1: To run the performance test statistics pass conditions, delete the targetJmeter folder if it exists.
+2: Go into the expense-app-managers directory.
+3: Run in the terminal: mvn -Dtest=PassConditions test
 
 ## Running Employee App Connected to AWS Database
 python python\api\app.py AWS

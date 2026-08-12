@@ -1,7 +1,9 @@
 # f9e69e2a0fe040818a194482856925db
 services:
   jenkins:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: jenkins
     ports:
       - "8080:8080"

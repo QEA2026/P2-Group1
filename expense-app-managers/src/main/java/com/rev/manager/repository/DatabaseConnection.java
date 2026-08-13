@@ -30,7 +30,7 @@ public class DatabaseConnection {
     }
 
     private DatabaseConnection(String requestedPath, boolean allowCreateIfMissing) {
-        if(requestedPath.equals("AWS")){
+        if(requestedPath != null && requestedPath.equals("AWS")){
             this.databasePath = "AWS";
             this.allowCreateIfMissing = false;
         }

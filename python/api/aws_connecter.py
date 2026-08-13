@@ -8,7 +8,7 @@ def get_aws_connection():
     '''
 
     # Configuration Variables
-    EC2_PUBLIC_IP = "3.15.165.162"  # EC2 Public IP
+    EC2_PUBLIC_IP = "13.59.236.25"  # EC2 Public IP
     EC2_USER = "ec2-user"  #'ec2-user' for Amazon Linux
     PATH_TO_PEM_KEY = "secret\\p2-database.pem"
 

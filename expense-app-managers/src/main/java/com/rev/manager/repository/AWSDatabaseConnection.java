@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 
 public class AWSDatabaseConnection {
     // SSH Server Configuration
-    private static final String SSH_HOST = "3.15.165.162";
+    private static final String SSH_HOST = "13.59.236.25";
     private static final int SSH_PORT = 22;
     private static final String SSH_USER = "ec2-user";
     private static final String PATH_TO_KEY = /*System.getenv("user.dir")+*/"..\\secret\\p2-database.pem";

@@ -203,7 +203,7 @@ public class test_manager_endpoints {
 
         @Test
         @DisplayName("Logout without login")
-        @Disabled("Returns success even when no manager is logged in")
+        //@Disabled("Returns success even when no manager is logged in")
         void test_logout_without_login(){
             if(PRINT_DATA){System.out.println("Attempting to logout without logging in.");}
             given()
@@ -268,9 +268,6 @@ public class test_manager_endpoints {
             "/api/reports/expenses/daterange/csv?startDate=2020/01/01&endDate=2026/01/01"
         })
         void test_restricted_get_endpoints_without_auth(String endpoint){
-            if(endpoint.equals("/api/expenses")){
-                Assumptions.abort("This test fails, no authorization required for /api/expenses, but should be required");
-            }
             if(PRINT_DATA){System.out.println("Testing endpoint without auth: "+endpoint);}
             given()
                 .baseUri(BASE_URL)
@@ -363,6 +360,8 @@ public class test_manager_endpoints {
                     """);
             assumeTrue(rs.next(), "Error with JDBC object, aborting test");
             int exp_count = rs.getInt("COUNT(*)");
+            s.close();
+            rs.close();
 
             List<LinkedHashMap<String,String>> expList = 
             given()

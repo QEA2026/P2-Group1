@@ -102,11 +102,11 @@ class ExpenseManager:
         status = emp.view_expense_status(id)
         if status == "pending":
             dbCursor = emp.connection.cursor()
-            prompt = "DELETE from expenses WHERE id = ?"
+            prompt = "DELETE from approvals WHERE expense_id = ?"
             if convert_syntax:
                 prompt = convert_sqlite_postgre(prompt)
             dbCursor.execute(prompt, (id,))
-            prompt = "DELETE from approvals WHERE expense_id = ?"
+            prompt = "DELETE from expenses WHERE id = ?"
             if convert_syntax:
                 prompt = convert_sqlite_postgre(prompt)
             dbCursor.execute(prompt, (id,))

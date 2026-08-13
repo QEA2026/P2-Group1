@@ -178,14 +178,24 @@ public class Main {
         // Manager logout endpoint (no auth required)
         app.post("/api/auth/logout", ctx -> {
             // Clear the JWT cookie
-            ctx.removeCookie("jwt");
-            ctx.json(Map.of(
-                "success", true,
-                "message", "Logged out successfully"
-            ));
+            if(ctx.cookieMap().size() == 0){
+                ctx.status(400);
+                ctx.json(Map.of(
+                    "success", false,
+                    "message", "User not logged in"));
+            }
+            else{
+                ctx.removeCookie("jwt");
+                ctx.status(200);
+                ctx.json(Map.of(
+                    "success", true,
+                    "message", "Logged out successfully"
+                    ));
+            }
         });
         
         // Protected routes - require manager authentication
+        app.before("/api/expenses", authMiddleware.validateManager());
         app.before("/api/expenses/*", authMiddleware.validateManager());
         app.before("/api/reports/*", authMiddleware.validateManager());
         

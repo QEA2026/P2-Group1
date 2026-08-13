@@ -79,7 +79,6 @@ public class test_emp_endpoints {
     @Nested
     @DisplayName("Login Tests")
     @Feature("Login")
-    //@Disabled //TODO: Remove
     class LoginTests{
 
         @ParameterizedTest(name = "Login with username \"{0}\" and password \"{1}\" gives {2}")
@@ -87,8 +86,7 @@ public class test_emp_endpoints {
             "Bob, bob_22, success, Login, 200",
             "Bob, bob22, error, combination, 401",
             "Bob, , error, password, 401",
-            ", bob_22, error, username, 401",
-            //"Andrew, onetwothree, error, manager, 401"//TODO: Test currently fails, ignoring for now
+            ", bob_22, error, username, 401"
         })
         @Description("Tests with correctly formatted json input data")
         void test_login_valid_body (String username, String password, String status, String message, int statusCode){
